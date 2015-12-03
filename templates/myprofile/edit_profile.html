@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load model_fields %}
+
+{% block content %}
+<div class="wrapper">
+    <div class="sidebar sidebar-left">
+        <i class="fa fa-left"/>
+    </div>
+    <div class="row Talent Details">
+
+        {% for module in profile_config.values %}
+       
+            {% with module.0|custom_template as c_template %}
+                {% include "myprofile/profile_section.html" with the_user=the_user user=user can_edit=can_edit %}
+            {% endwith  %}
+        {% endfor %}
+    </div>
+    
+        
+
+    {% if user.is_authenticated %}
+        {% if can_edit %}
+            <div class="formBox right-side-fixed" id="moduleBank">
+                
+                <!table class="table table-bordered tables-striped">
+                <div class="col-sm-4">
+                    <h3>Add a New Section</h3>
+                {% for module in unit_names %}
+                <a class="" id="{{module}}-new-section" href="{% url 'handle_form' %}?module={{module}}&id=new">
+                <button type="button" class="btn btn-default btn-block">
+                    {{ module }}
+                </button> 
+                </a> 
+                {% endfor %}
+            </div>
+                <!/table>
+            </div>{# /moduleBank #}
+        {% else %}
+            <a class"" href="{% url 'talent' 'prev' %}?user={{ the_user }}">Previous</a>
+            <a class"" href="{% url 'talent' 'next' %}?user={{ the_user }}">Next</a>
+        {% endif %}{% endif %}
+</div>{# /wrapper #}
+
+{% endblock %}
+
+

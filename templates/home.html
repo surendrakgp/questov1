@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="row">
+	{% if not user.is_authenticated %}
+		<div class="col-sm-7">
+
+		</div>
+		<div class="col-sm-5">
+			<form action="/register/" method="post" style="text-align:center"> {% csrf_token %}
+	    		{% for field in signupform %}
+	    	
+	                <div class="col-sm-4 col-sm-offset-2" align="center" style ="color:#10A4FF">
+	                     {% if 'Email' in field.label %} <span class="glyphicon glyphicon-user"></span>{% else %} <span class="glyphicon glyphicon-eye-open"></span>{% endif %} {{ field.label|safe }}
+	                </div>           
+	                <div class="col-sm-6 col-sm-pull-1" style="border-color:#10A4FF">
+	                    {{ field }}
+	                    {% if signupform.errors %}
+	                        {{ field.errors|escape }}
+	                    {% endif %}
+	                </div>
+	                
+	                <br><br><br>
+	            {% endfor %}
+	            {% if signupform.errors %}
+	                {% for error in signupform.non_field_errors %}
+	                     {{ error|escape }}
+	                {% endfor %}
+	            {% endif %}
+	        	<input type = "submit", class="btn btn-info", value = "Signup", role="button", align="center" style="background-color:#10A4FF">
+		    </form>
+		</div>
+	{% else %}
+		{{ user.email }}
+	{% endif %}
+</div>
+
+{% endblock content %}
+
+
+
+
+{% block talent %}
+<div class="categorylist-container" id="categorylist">
+<h3 class="text-center pagefont-medium show_categorylist-Heading">CATEGORY LIST</h3>
+
+            
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load model_fields %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1>{{module.verbose}} <small>Details</small></h1>
+    </div>
+</div>
+<div class="row">
+    <div class="span8 offset2">
+        <div class="formBox">
+            <table class="table table-bordered table-striped">
+                {% with module.item|process_field_types as fields %}
+                    {% for label, value, type in fields %}
+                        {% if value == None or value == "" %}
+                        {% else %}
+                        <tr class="row">
+                            <td class="span3">{{ label }}</td>
+                            {% if 'Job Search Status' in label %}
+                                 <td class="span9">{{ module.item.get_Job_Search_Status_display }}</td>
+                            {% elif 'Desired Salary' in label %}
+                                 <td class="span9">{{ module.item.get_desired_Salary_display }}</td>
+                            {% elif 'Social Select' in label %}
+                                 <td class="span9">{{ module.item.get_social_select_display }}</td>
+                            {% elif 'Degree' in label %}
+                                 <td class="span9">{{ module.item.get_degree_display }}</td>  
+
+                            {% else %}
+                                <td class="span9">{{ value }}</td> 
+                            {% endif %}
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endwith %}
+            </table>
+            <div class="actions">
+                <a class="btn primary pull-right" href="{% url 'view_profile' %}">{% trans 'Back' %}</a>
+                <a class="btn pull-right" href="{% url 'handle_form' %}?id={{ module.item.id }}&module={{ module.item.get_verbose.title }}">
+                    {% trans 'Edit' %}
+                </a>
+                <div class="clear"></div>
+            </div>
+        </div>{# /formBox #}
+    </div>{# /span8 #}
+</div>{# /row #}
+{% endblock %}

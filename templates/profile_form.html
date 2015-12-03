@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1>
+            {% if item_id == "new" %}
+
+            {% trans 'Add' %}
+
+            {% else %}
+
+            {% trans 'Edit' %}
+
+            {% endif %}
+
+            <small>{% trans verbose %}</small>
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span10 offset1">
+        <form action="" method="post" id="profile-unit-form"
+            {% csrf_token %}
+            <div class="clear"></div>
+
+            <div class="actions">
+                <div class="form-label pull-left">&nbsp;</div>
+
+                {% if item_id != "new"%}
+
+                <button id="delete" type="button" data-toggle="modal" data-target="#delete-confirm" class="btn">{% trans 'Delete' %}</button>
+                <div id="delete-confirm" class="modal hide fade row">
+                    <div class="modal-header">
+                        {% trans 'Really Delete?' %}
+                    </div>
+                    <div class="modal-body">
+
+                        {% blocktrans %}
+
+                        Are you sure you want to delete this {{verbose}}?
+
+                        {% endblocktrans %}
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="actions">
+                            <button data-dismiss="modal" class="btn primary pull-right">{% trans 'Cancel' %}</button>
+                            <a class="btn pull-right" href="{% url 'delete_item' %}?item={{ item_id }}">{% trans 'Delete' %}</a>
+                        </div>
+                    </div>
+                </div>{# /delete-confirm #}
+
+                {% endif %}
+
+                <a href="{% url 'view_profile' %}" class="btn">{% trans 'Cancel' %}</a>
+                <button type="submit" class="btn primary" id="profile-save">{% trans 'Save' %}</button>
+            </div>{# /actions #}
+        </form>
+    </div>{# /span10 #}
+</div>{# /row #}
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+
+    {% block content %}
+    {% if user.is_authenticated|lower == "true" %}
+        <h2> You are already logged in <h2>
+    {% else %}
+        <h2 align="center"> Login</h2><br>
+        <form action="/login/" method="post" style="text-align:center"> {% csrf_token %}
+            {% for field in form %}            
+                <div class="col-sm-4" align="right">
+                    {{ field.label|safe }}
+                </div>          
+                <div class="col-sm-8">
+                    {{ field }}
+                    {% if form.errors %}
+                        {{ field.errors|escape }}
+                    {% endif %}
+                </div>
+                <br/><hr/>
+            {% endfor %}
+            {% if form.errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-error">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <input type = "submit", class="btn btn-md btn-success", value = "Login", role="button", align="center">
+        </form>
+
+        <br><br>
+        <h2 align="center"> Sign Up</h2><br>
+            <form action="/register/" method="post" style="text-align:center"> {% csrf_token %}
+                {% for field in signupform %}
+                    <div class="col-sm-4" align="right" >
+                        {{ field.label|safe }}
+                    </div>          
+                    <div class="col-sm-8">
+                        {{ field }}
+                        {% if signupform.errors %}
+                            {{ field.errors|escape }}
+                        {% endif %}
+                    </div>
+                    <br/><hr/>
+                {% endfor %}
+                {% if signupform.errors %}
+                    {% for error in signupform.non_field_errors %}
+                         {{ error|escape }}
+                    {% endfor %}
+                {% endif %}
+            <input type = "submit", class="btn btn-md btn-success", value = "Signup", role="button", align="center">
+            </form>
+    {% endif %}
+
+    {% endblock %}

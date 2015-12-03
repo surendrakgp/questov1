@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="wrapper"> 
+    <div class="row default-heading-talent-view" id="profileTitleRow">
+        <div class="span10" id="profileTitleBar">
+            <h1>{{the_user.name}}
+            <small>Talent Profile</small>
+            </h1>
+        </div>
+    </div>
+    <div class="span4 mobile-heading-talent-view">
+        <span class=pull-left></span>
+        <div id="mobile-name-heading">
+            <span id="name-flag">{{the_user}}</span>
+            <br />
+            <a class="href-small-icon" href="mailto:{{the_user.email}}">{{ the_user.email }}</a>
+        <br />
+        <div class="progress" id="talent-progress-mobile">
+        <div class="bar bar-" id="initial-bar" style="width:{{ the_user.profile_completion}}% ;"></div>
+        </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    <br />
+    <div class="row" id="talent-content">
+        <div class="span4 default-heading-talent-view">
+        <table><tr>
+        
+        <td><div id="talent-completion">
+            <b><div >Profile is <span id="highlight" class="initial-highlight">{{ the_user.profile_completion }}% complete</span></div></b>
+            <div class="progress" id="talent-progress">
+                <div class="bar bar-" id="initial-bar" style="width: {{ the_user.profile_completion}}%;"></div>
+            </div>
+        </div></td>
+        </tr></table>
+            <br />
+            <p>
+                <a class="href-small-icon" href="mailto:{{the_user.email}}"><img src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /><span style="margin-top:5px; margin-left:5px;">{{the_user.email}}</span></a>
+            </p>
+        </div>
+
+        {% if user_info %}
+
+        <div id="talent-page-mobile-view">
+            <div id="talent-page-mobile-toggle">
+                <span class="toggle-text" id="detail-toggle">&nbsp;Details</span><span class="toggle-text" id="activity-toggle">&nbsp;Activity</span>
+            </div>
+            <div class="span4 pull-left">
+                <div class="formBox talent-details">
+                    <h3 class="form-box-title">Details</h3>
+
+                    {% for model in user_info.values %}
+                        {% if model %}
+
+                        <!div class="accordion" id="details-{{model.0.get_model_name}}-collapse">
+                            <div class="accordion-group">
+                                <div class="accordion-heading details-heading">
+                                    <!a class="accordion-toggle" data-toggle="" data-parent="#details-{{model.0.get_model_name}}-collapse" 
+                                        href="#{{model.0.get_model_name}}-details-table">{{model.0.get_verbose}}<!span class="pull-right"><!i class="icon icon-plus"><!/i><!/span><!/a>
+                                </div>
+                                <!div id="{{model.0.get_model_name}}-details-table" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                        {% for item in model %}
+
+                                        <div class="info-row">
+                                            <ul id="details-smallList">
+                        						{% if item.content_type.name == 'basicinfo' %}
+                            						<li> {{ item.profesional_Headline }}</li>
+                            						<li> {{ item.get_Job_Search_Status_display }} </li>
+                            						<li> {{ item.get_desired_Salary_display }}</li>
+                                                
+                                                {% elif item.content_type.name == 'education' %}
+                                                    <li><b>{{item.get_degree_display}} in {{item.degree_major}}</b></li>
+                                                    <li>{{item.collegename}}</li>
+                                                    <li>{{item.end_date}}</li>
+                                                
+                                                {% elif item.content_type.name == "experience" %}
+                                                    <li><b>{{item.title}}</b></li>
+                                                    <li>{{item.company_name}}</li>
+                                                    {% if item.stillworking == True %}
+                                                        <li>{{item.start_date}} - Current</li>
+                                                    {% else %}
+                                                        <li>{{item.start_date}} - {{item.end_date}}</li>
+                                                    {% endif %}
+
+                                                {% elif item.content_type.name == "social" %}
+                                                    <li><b>{{ item.get_social_select_display }}</b></li>
+                                                    <li>http:/{{item.get_social_select_display| lower}}.com/{{ item.link }}</li>
+
+                                                {% elif item.content_type.name == "skill" %}
+                                                    <li><b>{{ item.skillname }}</b>&nbsp &nbsp {{item.rating}}</li>
+
+                                                {% endif %}
+                                            </ul>
+                                        </div>{# /info-row #}
+
+                                        {% endfor %}
+
+                                    </div>{# /accordion-inner #}
+                                <!/div>{# /-details-table #}
+                            </div>{# /accordion-group #}
+                        <!/div>{# /accordion #}
+
+                       {% endif %} 
+                    {% endfor %}
+
+                </div>{# /formBox #}
+            </div>{# /span4 #}
+
+        {% else %}
+
+            <div class= "span4">
+                User has not provided any information.
+            </div>
+
+        {% endif %}
+
+            <div class="span4">
+               <div class="formBox talent-details talent-activity-box">
+                  <h3 class="form-box-title">Activity</h3>
+
+                    {% if searches %}
+
+                        <div class="accordion" id="details-searches-collapse">
+                            <div class="accordion-group">
+                                <div class="accordion-heading details-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-searches-collapse" 
+                                        href="#searches-details-table">Saved Searches<span class="pull-right"><i class="icon icon-plus"></i></span></a>
+                                </div>
+                                <div id="searches-details-table" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+
+                                        {% for search in searches %}
+
+                                            <div class="info-row">
+                                                <ul id="details-smallList">
+                                                    <li><b>{% if search.label %}{{search.label}}{% else %}Unlabeled{% endif %}</b></li>
+                                                    <li>{{search.url}}</li>
+                                                    <li>{{search.created_on}}</li>
+                                                </ul>
+                                            </div>{# /info-row#}
+
+                                        {% endfor %}
+
+                                    </div>{# /accordion-inner #}
+                                </div>{# /accordion-body #}
+                            </div>{# /accordion-group #}
+                        </div>{# /accordion #}
+
+                    {% endif %}
+
+                    {% if actions %}
+                        <div class="accordion" id="details-actions-collapse">
+                            <div class="accordion-group">
+                                <div class="accordion-heading details-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-actions-collapse"
+                                       href="#actions-details-table">Microsite Activity<span class="pull-right"><i class="icon icon-plus"></i></span></a>
+                                </div>
+                                <div id="actions-details-table" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                        {% for key in actions %}
+                                            <div class="info-row">
+                                                <ul id="details-smallList">
+                                                    
+                                                </ul>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>{# /formBox #}
+            </div>{# /span4 #}
+        </div>{# /talent-page-mobile-view #}
+    </div>{# /row #}
+</div>{# /wrapper #}
+{% endblock %}
+
+{% block extra-js %}
+<script src="//d2e48ltfsb5exy.cloudfront.net/framework/v2/secure/js/def.ui.bootstrap.tabs.js" type="text/javascript"></script>
+<script src="//d2e48ltfsb5exy.cloudfront.net/framework/v2/secure/js/code/bootstrap-collapse.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}activity.js{{ gz }}" type="text/javascript"></script>
+{% endblock %}

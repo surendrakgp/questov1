@@ -1,0 +1,61 @@
+{% load staticfiles %}
+<div class="col-sm-8" align="right" style="border-style:dotted; border-width:thin;">
+    {% for item in module %}
+    <h5>
+        {% if item.contact_no %} Contact No : {{ item.contact_no }} {% endif %}
+        Email Id : {{ the_user.email }}
+    </h5>
+    {% endfor %}
+</div>
+<div class="row col-sm-12" style="border-style:dotted; border-width:thin; margin:2px; background-color:#E7FEFF">
+    {% for item in module %}
+        <div class="col-sm-3"><br>
+            <div class="media-container" align="right">
+                <img class="card-img-top img-responsive" {% if item.Profile_Pic %} 
+                    src='{{ MEDIA_URL }}{{ item.Profile_Pic }}'
+                {% else %}
+                    src="{% static 'img/placeholder.svg' %}" {% endif %} alt="Card image cap" width=250>
+            </div>
+
+        </div>
+        <div class="col-sm-6"><h2>{{ item.name }}{% if can_edit %}<a class="btn-link" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}</h2>
+            <h4>{{ item.profesional_Headline }}</h5>
+            <h5>{{ item.get_Job_Search_Status_display }}, Desired Salary:{{ item.get_desired_Salary_display }}, Current Location : {{ item.located_at }} </h5>
+            {% if item.about_you %}
+                <a class="btn btn-clean" data-toggle="modal" data-target=".bs-example-modal-lg"><h4 style="margin:0px">About me</h4>
+                </a>
+
+                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div style="margin:40px;">
+                                <h4 align="center">About Me</h4>
+                                <p align="left"> {{ item.about_you }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <p style='line-height:1.5em; height:6em; overflow-y:auto; font-style: normal; font-size:small'>{{item.about_you }}</p>
+            {% endif %}          
+        </div>
+
+        <div class="col-sm-3" align="left">
+            <br><br><br>
+            <ul>
+                {% if item.dateofbirth %}<li> Date of Birth : {{ item.dateofbirth }}</li>{% endif %}   
+                {% if item.Website_URL %}<li> Website Url : <a href="https://{{ item.Website_URL }}" target="_blank">{{ item.Website_URL }}</a></li>{% endif %} 
+                {% if item.Persoanl_URL %}<li> Personal Url : {{ item.Persoanl_URL }}</li>{% endif %} 
+                <li> Last Updated: {{ item.updated }}</li> 
+                <li>Added Skills : 
+                {% for item in user_skill %}
+                {{ item }}
+                {% if forloop.last %}{% else %},{% endif %}
+                {% endfor %}
+                </li> 
+                
+            
+                
+            </ul>
+        </div>
+    {% endfor %}
+</div>

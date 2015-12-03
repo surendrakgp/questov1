@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block site-title %}
+        <title>Contact FAQ My.jobs</title>
+        <meta name="title" content="Contact FAQ My.jobs">
+{% endblock site-title %}
+{% block meta-extra %}{% endblock meta-extra %}
+{% block header %}
+    <h1>Contact FAQ</h1>
+{% endblock header%}
+	{% block text %}
+    {% for f in faq %}
+        <div class="row faq">
+            <div class="span8">
+                <div class="faq-question">
+                    {{ f.question }}
+                </div>
+                <div class="faq-answer">
+                    {{ f.answer|safe }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="span8">
+            <a id="continue-contact-us" class="btn" href="{% url 'contact' %}">None of the above Contact Us</a>
+        </div>
+    </div>
+   {% endblock %}
+	

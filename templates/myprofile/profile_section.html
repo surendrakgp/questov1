@@ -1,0 +1,87 @@
+{% load i18n %}
+    {% if "social" in module.0.get_model_name %}
+        <div class="col-sm-4" align="left" style="border-style:dotted; border-width:thin;">
+            {% for item in module %}
+                <a href="https://{{ item.get_social_select_display|lower }}.com/{{ item.link }}" target="_blank"><i class="fa fa-{{ item.get_social_select_display|lower }} fa-2x"></i></a>{% if can_edit %}<a class="btn-link" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}&nbsp&nbsp
+            {% endfor %}
+        </div>
+
+    {% elif "skill" in module.0.get_model_name %}
+        <div class="col-sm-12" style="border-style:dotted; border-width:thin; margin-top:20px; margin-bottom:20px">
+            <p style="margin-top:20px"> Skrillex </p>
+            {% for item in module %}
+                <div class="col-sm-3" style="right-margin:20px">{% if can_edit %}<a class="btn-link" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow={{ item.get_rating_display }} aria-valuemin="0" aria-valuemax="10" style="width: {{ item.get_rating_display }}0%;min-width:1%">
+                            {{ item.skillname }} : {{ item.get_rating_display }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% elif "experience" in module.0.get_model_name %}
+        <div class="col-sm-12"  style="border-style:dotted; border-width:thin;">
+            <div class="panel-group" id="accordion"><h3>Work Experience</h3>
+                {% for item in module|dictsort:"end_date" reversed %}
+                    <div class="panel panel-info">
+                        <div class="panel-heading" id="accordion">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ item.id }}" style="margin:0px">
+                                    <h4 style="margin:0px">
+                                        <p>{{ item.title }} <small> {{ item.start_date }} - {% if item.stillworking %}Present{% else %}{{ item.end_date }}{% endif %}  ({{ item.start_date|timesince:item.end_date }}) {% if user.is_authenticated %}{% if can_edit %}<a class="btn-link" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        {% endif %}{% endif %}</small></p>
+                                        <p>{{ item.company_name }}</p>
+                                        <p><small>Skills Used: {{ item.usedskills }}</small><p>
+
+
+                                    </h4>
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div id="collapse{{ item.id }}" class="panel-collapse collapse"  align="left">
+                            <div class="panel-body">
+                                    {{ item.summary }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% elif "education" in module.0.get_model_name %}
+        <div class="col-sm-12"  style="border-style:dotted; border-width:thin;">
+            <div class="panel-group" id="accordion"><h3>Education Details</h3>
+                {% for item in module|dictsort:"start_date" reversed %}
+                    <div class="panel panel-info">
+                        <div class="panel-heading" id="accordion">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ item.id }}" style="margin:0px">
+                                    <h4 style="margin:0px">
+                                        <p>{{ item.get_degree_display }} in {{ item.course }}
+                                        {% if user.is_authenticated %}{% if can_edit %}<a class="btn-link" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}"><span class="glyphicon glyphicon-pencil"></span></a></p>
+                                        {% endif %}{% endif %}</small></p>
+                                        <p>{{ item.collegename }}<small> {{ item.city_name }} ({{ item.start_date }} - {% if not item.end_date %}Present{% else %}{{ item.end_date }}{% endif %})</small><p>
+                                    </h4>
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div id="collapse{{ item.id }}" class="panel-collapse collapse"  align="left">
+                            <div class="panel-body" style="max-height:200px">
+                                    {{ item.activities }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% else %}
+        {% if c_template %}
+        {{ c_template }}
+            {% include c_template with the_user=the_user can_edit=can_edit %}
+        
+        {% endif %}
+    {% endif %}

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1>
+            {% if item_id == "new" %}
+
+            {% trans 'Add' %}
+
+            {% else %}
+
+            {% trans 'Edit' %}
+
+            {% endif %}
+
+            <small>{% trans verbose %}</small>
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span10 offset1">
+        <form action="" method="post" id="profile-unit-form" enctype="multipart/form-data"> {% csrf_token %}
+            {% for field in form %} 
+                <div class="row" id="{{ module }}-{{ field.name }}">          
+                    <div class="col-sm-4">
+                        {{ field.label|safe }}
+                    </div>          
+                    <div class="col-sm-8">
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <!div class="alert alert-error">
+                            <div class="control-group {%if field.errors %}error{% endif %}">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <br/><hr/>
+                </div>
+            {% endfor %}
+            {% if form.errors %}
+                {% for error in form.non_field_errors %}
+                    <!div class="alert alert-error">
+                    <div class="control-group {%if field.errors %}error{% endif %}">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="actions">
+                <div class="form-label pull-left">&nbsp;</div>
+                {% if item_id != "new" and module != "Basicinfo"  %}
+                    <a button id="delete"  class="btn" href="{% url 'delete_item' %}?item={{ item_id }}">{% trans 'Delete' %}</a>
+                {% endif %}
+
+                <a href="{% url 'view_profile' %}" class="btn">{% trans 'Cancel' %}</a>
+                <button type="submit" class="btn primary" id="profile-save">{% trans 'Save' %}</button>
+            </div>{# /actions #}
+        </form>
+    </div>{# /span10 #}
+</div>{# /row #}
+
+<head>
+    <link href="{% static 'calendar/jquery-ui.css' %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static 'calendar/jquery-1.10.2.js' %}"></script> 
+    <script type="text/javascript" src="{% static 'calendar/jquery-ui.js' %}"></script> 
+    
+<script>
+    $(document).ready(function() { 
+        $("#random").datepicker();
+        $("#id_experience-start_date").datepicker({
+          changeMonth: true,
+          changeYear: true
+        });
+        $("#id_experience-end_date").datepicker({
+          changeMonth: true,
+          changeYear: true
+        });
+        $("#id_education-start_date").datepicker({
+          changeMonth: true,
+          changeYear: true
+        });
+        $("#id_education-end_date").datepicker({
+          changeMonth: true,
+          changeYear: true
+        });
+        $("#id_basicinfo-dateofbirth").datepicker({
+          changeMonth: true,
+          changeYear: true
+        });
+    }); 
+</script> 
+</head> 
+<script>
+//     document.getElementById("id_experience-end_date").required = true;
+//     document.getElementById("id_experience-start_date").datepicker();
+//     $('#id_experience-stillworking').change(function(){
+//             if(this.checked){
+//                 $('#Experience-end_date').hide()
+//                 document.getElementById("id_experience-end_date").required = false;
+//             }
+//             else{
+//                 $('#Experience-end_date').show()
+//                 $('#Experience-end_date').datepicker();
+//                 document.getElementById("id_experience-end_date").required = true;
+//             }
+//         });
+// </script>
+
+  <script>
+  $(function() {
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    $( "#id_skill-skillname" ).autocomplete({
+      source: availableTags,
+      autoFocus: true,
+    });
+  });
+  </script>
+
+  <script>
+  $(function() {
+    var availableTags = [
+      "Delhi",
+      "Mumbai",
+      "Rajasthan",
+      "Punjab",
+      "Banglore",
+      "Pune",
+      "Hyderabad",
+      "Kolkata",
+      "Patana",
+      "Ranchi",
+      "Dhanbad",
+    ];
+    $( "#id_basicinfo-located_at" ).autocomplete({
+      source: availableTags,
+      autoFocus: true,
+    });
+  });
+  </script>
+{% endblock %}

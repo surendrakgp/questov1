@@ -1,0 +1,19 @@
+<table class="table" style="width:100%">
+    {% for item in module %}
+        <tr id="{{item.get_model_name}}-{{item.id}}-item">
+            <td>
+
+                <b>{{ item.get_degree_display }} - {{item.course }}</b>
+                <br>
+                {{ item.collegename }}
+            </td>
+            <td>
+                {{item.start_date}} - {{ item.end_date }}
+            </td>
+            <td class="action" align="right">
+                <a class="btn-link" href="{% url 'get_details' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">Details</a>
+                <a class="btn-link" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">Edit</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="wrapper"> 
+    <div class="row" id="profileTitleRow">
+
+        <div class="span10" id="profileTitleBar">
+
+
+            <h3>{{user.email}}</h3>
+        </div>
+        <div class="span10" id="profileSubtitleBar">
+            <a href="#">Account settings</a>
+        </div>
+    </div>{# /profileTitleRow #}
+    <div class="row">
+        <div class="span8" id="moduleColumn">
+
+            {% csrf_token %}
+            {{ profile_config}}
+            {% for module in profile_config.values %}
+
+                {% with module.0|custom_template as c_template %}
+                    {% include "myprofile/profile_section.html" %}
+                {% endwith %}
+
+            {% endfor %}
+
+        </div>
+        
+        <div class="scroller_anchor"></div>
+        <div class="span4" id="rightColumn">
+            <div class="formBox" id="profile-completion">
+                <div class="pull-right">Your profile is <span id="highlight">{{user.profile_completion}}% complete</span></div><br>
+              
+            </div>
+            <div class="formBox right-side-fixed" id="moduleBank">
+                <h3>Add a New Section</h3>
+                <table class="table table-bordered tables-striped">
+                {% for module in unit_names %}
+                <tr class="profile-section" {% if module.items %}style="display:none;"{% endif %}><td>
+                    <a class="" id="{{module}}-new-section" href="{% url 'handle_form' %}?module={{module}}&id=new">
+                        {{ module }}
+                    </a>
+                </td></tr>
+                {% endfor %}
+                </table>
+            </div>{# /moduleBank #}
+        </div>{# /span4 #}
+    </div>{# /row #}
+</div>{# /wrapper #}
+
+{% endblock %}
+

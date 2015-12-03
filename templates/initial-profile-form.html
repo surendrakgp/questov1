@@ -1,0 +1,39 @@
+{% load i18n %}
+<form action="" method="post" id="profile-form">
+<div class="span8" id="newAccountData">
+    <div class="row">                                            
+        <div class="span4">
+            <div class="profile-unit">
+                <h4>{% trans "Personal Information" %}</h4>
+                {{ basicinfoform.as_ul }}<hr>
+				
+            </div>
+            <div class="profile-unit">
+                <h4>{% trans "Primary Contact Info" %}</h4>
+                {{ skillform.as_ul }}
+                <input type="text" id="usaPhoneField" name="friendlyPhoneField" 
+                    class="friendlyPhoneField" placeholder="Phone Number"/>
+                <br/>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="profile-unit">
+                <h4>{% trans "Most Recent Job" %}</h4>
+                {{ experienceform.as_ul }}
+            </div>
+            <div class="profile-unit">
+                <h4>{% trans "Most Recent Education" %}</h4>
+                {{ educationform.as_ul }}
+            </div>
+        </div>            
+        {% csrf_token %}
+    </div> 
+</div>
+<div class="actions span8 offset4">
+    <button type="submit" class="btn primary pull-right" value="save" id="save">
+      Save
+    </button>
+    <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
+    <div class="clear"></div>
+</div>
+</form>

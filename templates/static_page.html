@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load common_tags %}
+{% comment %}
+This page was created to make editing style for
+static pages (about.html, privacy, etc) easier and faster
+{% endcomment %}
+{% block content %}
+    <div class="row">
+        <div class="span8">
+            {% block text %}{% endblock text %}
+        </div>
+        {% block quick-links %}
+        <div class="span4">
+            <div class="formBox" id="moduleBank">
+                <h2>Quick Links:</h2>
+                <table class="table table-bordered tables-striped">
+                    <tr class="profile-section">
+                        <td><a href="/">Home</a></td>
+                    </tr>
+
+                    {% if user.is_authenticated %}
+
+                        <tr class="profile-section">
+                            <td><a href="{% url 'view_profile' %}">My Profile</a></td>
+                        </tr>
+                        <tr class="profile-section">
+                            <td><a href="{% url 'saved_search_main' %}">My Saved Search</a></td>
+                        </tr>
+
+                    {% endif %}
+
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endblock quick-links %}
+{% endblock content %}
